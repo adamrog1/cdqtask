@@ -1,0 +1,158 @@
+openapi: 3.0.1
+info:
+  title: DemoApp API
+  description: API for managing persons and classification tasks
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081/api
+paths:
+  /person:
+    post:
+      summary: Create person
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDTO'
+            example:
+              name: "Adaśko"
+              surname: "Rogalski"
+              birthDate: "2024-01-12"
+      responses:
+        '200':
+          description: Person Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResponse'
+  /person/{id}:
+    get:
+      summary: Get person
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Person details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDTO'
+    patch:
+      summary: Update person
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDTO'
+            example:
+              name: "Adam"
+              surname: "Rogalski"
+              birthDate: "2024-01-12"
+              company: "thr"
+      responses:
+        '200':
+          description: Person Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResponse'
+  /person/getAll:
+    get:
+      summary: List all persons
+      responses:
+        '200':
+          description: A list of persons
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _embedded:
+                    type: object
+                    properties:
+                      personDTOList:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PersonDTO'
+
+  /task/{taskId}:
+    get:
+      summary: Get task by ID
+      parameters:
+        - in: path
+          name: taskId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDTO'
+  /task/getAll:
+    get:
+      summary: List all tasks
+      responses:
+        '200':
+          description: A list of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskDTO'
+
+components:
+  schemas:
+    PersonDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        surname:
+          type: string
+        birthDate:
+          type: string
+          format: date
+        company:
+          type: string
+        _links:
+          type: object
+    PersonResponse:
+      type: object
+      properties:
+        personId:
+          type: string
+        taskId:
+          type: string
+        message:
+          type: string
+        _links:
+          type: object
+    TaskDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        result:
+          type: object
+          additionalProperties:
+            type: string
+        taskProgress:
+          type: string
