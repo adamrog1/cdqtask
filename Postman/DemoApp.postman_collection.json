@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "13352cf8-d98f-4036-ab51-db125b1c0dde",
+		"name": "DemoApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36027307"
+	},
+	"item": [
+		{
+			"name": "Person",
+			"item": [
+				{
+					"name": "Create person",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response body as JSON",
+									"let responseData = pm.response.json();",
+									"if (responseData.taskId) {",
+									"    pm.collectionVariables.set(\"taskId\", responseData.taskId); // or use pm.environment.set(...) if preferred",
+									"    console.log(\"taskId saved:\", responseData.taskId);",
+									"} else {",
+									"    console.warn(\"No taskId found in response.\");",
+									"}",
+									"// Check if taskId exists and set it as a collection/environment variable",
+									"if (responseData._links) {",
+									"    pm.collectionVariables.set(\"getLink\", responseData._links.self.href);",
+									"    pm.collectionVariables.set(\"updateLink\", responseData._links.update.href); // or use pm.environment.set(...) if preferred",
+									"    console.log(\"Link saved:\", responseData._links.self.href);",
+									"} else {",
+									"    console.warn(\"No links found in response.\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Adaśko\",\n    \"surname\": \"Rogalski\",\n    \"birthDate\": \"2024-01-12\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/person",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"person"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get person",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{getLink}}",
+							"host": [
+								"{{getLink}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update person",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Adam\",\n    \"surname\": \"Rogalski\",\n    \"birthDate\": \"2024-01-12\",\n    \"company\": \"thr\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{updateLink}}",
+							"host": [
+								"{{updateLink}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List All",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/person/getAll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"person",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Get Task",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/task/{{taskId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"task",
+								"{{taskId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Tasks",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/task/getAll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"task",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "taskId",
+			"value": ""
+		},
+		{
+			"key": "getLink",
+			"value": ""
+		},
+		{
+			"key": "updateLink",
+			"value": ""
+		}
+	]
+}
